@@ -1,0 +1,18 @@
+name: Build API
+on:
+  push:
+    paths:
+      - "api/*"
+
+jobs:
+  build:
+    env:
+      imageName: swdb-api
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: |
+          docker build api --file Dockerfile --tag docker.pkg.github.com/$(GITHUB_REPOSITORY)/$(imageName):latest
+          docker push docker.pkg.github.com/$(GITHUB_REPOSITORY)/$(imageName)
