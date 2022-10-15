@@ -1,5 +1,6 @@
 name: Build API
 on:
+  on: workflow_dispatch
   push:
     paths:
       - "api/*"
