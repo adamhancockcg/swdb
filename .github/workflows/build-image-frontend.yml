@@ -3,12 +3,12 @@ on:
   workflow_dispatch: {}
   push:
     paths:
-      - "api/*"
+      - "frontend/*"
 
 jobs:
   build:
     env:
-      imageName: swdb-api
+      imageName: swdb-frontend
       registry: docker.pkg.github.com
     runs-on: ubuntu-latest
 
