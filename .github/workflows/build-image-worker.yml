@@ -1,4 +1,4 @@
-name: Build API
+name: Build Worker
 on:
   workflow_dispatch: {}
   push:
