@@ -15,5 +15,5 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build the Docker image
         run: |
-          docker build api --file Dockerfile --tag docker.pkg.github.com/${{env.GITHUB_REPOSITORY}}/${{env.imageName}}:latest
-          docker push docker.pkg.github.com/${{env.GITHUB_REPOSITORY}}/${{env.imageName}}
+          docker build api -t docker.pkg.github.com/${{ github.repository }}/${{env.imageName}}:latest
+          docker push docker.pkg.github.com/${{ github.repository }}/${{env.imageName}}
