@@ -60,7 +60,12 @@ const endpoints = [
     "Saving updated time to",
     updatedDate.format("DD/MM/YYYY hh:mm:ss")
   );
-  await redis.set("updated", updatedDate.toString());
+
+  try {
+    await redis.set("updated", updatedDate.toString());
+  } catch (error) {
+    console.error("Redis error:", error);
+  }
 
   await redis.quit();
   console.log("Finished");
