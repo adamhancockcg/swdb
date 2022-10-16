@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently -n Frontend,API \"cd frontend && npm run dev\" \"cd api && npm run start\""
+    "dev": "concurrently -n Frontend,API,Worker \"cd frontend && npm run dev\" \"cd api && npm run dev\" \"cd worker && npm run start\"",
+    "postinstall": " concurrently -n API,Frontend,Worker \"cd api && npm install\"  \"cd frontend && npm install\"  \"cd worker && node index.js\""
   },
   "repository": {
     "type": "git",

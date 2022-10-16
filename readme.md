@@ -2,16 +2,16 @@
 
 Repo used to demo capabilities of ArgoCD
 
-## Deployment
+## Development
 
-Deploy with
-
-```
-kubectl apply -f app.yml
-```
-
-Tear down with
+Redis
 
 ```
-sh teardown.sh
+docker run --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest
+```
+
+App on development
+
+```
+npm run dev
 ```
