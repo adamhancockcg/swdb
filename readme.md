@@ -10,7 +10,7 @@ Redis
 docker run --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest
 ```
 
-App on development
+App development
 
 ```
 npm run dev
