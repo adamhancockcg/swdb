@@ -1,6 +1,6 @@
-# ARGOCD Demo App
+# SWDB
 
-Repo used to demo capabilities of ArgoCD
+A simple UI, ExpressJS app and NodeJS cache worker using Redis. Data is from https://swapi.dev/.
 
 - [Application Code](https://github.com/adamhancockcg/swdb.app)
 - [Helm Charts](https://github.com/adamhancockcg/swdb.helm)
