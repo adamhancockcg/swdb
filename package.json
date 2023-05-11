@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently -n Frontend,API,Worker \"cd frontend && npm run dev\" \"cd api && npm run dev\" \"cd worker && npm run start\"",
+    "dev": "concurrently -n Frontend,API,Worker,Redis \"cd frontend && npm run dev\" \"cd api && npm run dev\" \"cd worker && npm run start\"",
     "postinstall": " concurrently -n API,Frontend,Worker \"cd api && npm install\"  \"cd frontend && npm install\"  \"cd worker && node index.js\""
   },
   "repository": {
@@ -21,5 +21,15 @@
   "homepage": "https://github.com/adamhancockcg/swdb#readme",
   "devDependencies": {
     "concurrently": "^7.4.0"
+  },
+  "dependencies": {
+    "@opentelemetry/auto-instrumentations-node": "^0.36.6",
+    "@opentelemetry/exporter-jaeger": "^1.12.0",
+    "@opentelemetry/exporter-metrics-otlp-proto": "^0.38.0",
+    "@opentelemetry/exporter-trace-otlp-proto": "^0.38.0",
+    "@opentelemetry/resources": "^1.12.0",
+    "@opentelemetry/sdk-metrics": "^1.12.0",
+    "@opentelemetry/sdk-node": "^0.38.0",
+    "@opentelemetry/semantic-conventions": "^1.12.0"
   }
 }

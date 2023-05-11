@@ -1,11 +1,12 @@
 process.env.NODE_ENV != "production" ? require("dotenv").config() : false;
+require("./tracer.js");
 
 const {SWAPI, REDIS} = process.env;
 const axios = require("axios");
 const moment = require("moment/moment");
 const {createClient} = require("redis");
 const redisConfig = {
-  url: process.env.REDIS,
+  url: process.env.REDIS_URL,
 };
 
 if (process.env.redisPassword) {
@@ -14,21 +15,15 @@ if (process.env.redisPassword) {
 
 const redis = createClient(redisConfig);
 
-const endpoints = [
-  "people",
-  "planets",
-  "films",
-  "species",
-  "vehicles",
-  "starships",
-];
+const endpoints = ["people", "planets", "films", "species", "vehicles", "starships"];
 
 // const getIdFromUrl = (url) => url.slice(0, -1).split("/").pop();
+const {trace} = require("@opentelemetry/api");
 
-(async function () {
+async function main() {
   try {
     await redis.connect().then(() => {
-      console.log(`Connected to ${REDIS}`);
+      console.log(`Connected to ${REDIS_URL}`);
     });
   } catch {
     (e) => console.error(e);
@@ -40,6 +35,10 @@ const endpoints = [
     console.log(`Fetching ${endpoint}...`);
     apiCalls.push(
       new Promise((resolve, reject) => {
+        const span = trace.getTracer("worker").startSpan("fetchFromSWAPI");
+        span.setAttributes({
+          endpoint,
+        });
         axios
           .get(`${SWAPI}/${endpoint}`)
           .then(async (res) => {
@@ -50,16 +49,14 @@ const endpoints = [
             });
           })
           .catch((e) => reject(e));
+        span.end();
       })
     );
   }
   await Promise.all(apiCalls);
 
   const updatedDate = moment();
-  console.log(
-    "Saving updated time to",
-    updatedDate.format("DD/MM/YYYY hh:mm:ss")
-  );
+  console.log("Saving updated time to", updatedDate.format("DD/MM/YYYY hh:mm:ss"));
 
   try {
     await redis.set("updated", updatedDate.toString());
@@ -69,4 +66,9 @@ const endpoints = [
 
   await redis.quit();
   console.log("Finished");
-})();
+}
+
+// run first time
+main();
+// run every 60 seconds
+const intervalId = setInterval(main, 60 * 1000);

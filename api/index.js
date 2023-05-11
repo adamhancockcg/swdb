@@ -1,14 +1,16 @@
+require("./tracer");
 process.env.NODE_ENV != "production" ? require("dotenv").config() : false;
-
 const express = require("express");
 const app = express();
 const {port} = process.env || 3000;
 const {createClient} = require("redis");
 const cors = require("cors");
 app.use(cors({origin: "*"}));
+const {trace} = require("@opentelemetry/api");
+const {Span} = require("@opentelemetry/sdk-trace-base");
 
 const redisConfig = {
-  url: process.env.redis,
+  url: process.env.REDIS_URL,
 };
 
 if (process.env.redisPassword) {
@@ -51,9 +53,7 @@ app.get("/:resource", async (req, res) => {
 app.get("/", async (req, res) => {
   console.log("Request for Keys");
   try {
-    res.send(
-      (await redis.keys("*")).filter((key) => (key != "updated" ? true : false))
-    );
+    res.send((await redis.keys("*")).filter((key) => (key != "updated" ? true : false)));
   } catch (error) {
     res.send(error);
   }
